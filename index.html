@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="bg-gradient-to-br from-[#101014] via-[#18181b] to-[#1e293b] text-white">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoramento de Energia</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen flex flex-col items-center bg-gradient-to-br from-[#101014] via-[#18181b] to-[#1e293b] transition-all duration-300">
+
+    <nav class="w-full bg-[#18181b] shadow-lg fixed top-0 left-0 z-50 border-b border-[#374151] backdrop-blur-lg">
+      <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+        <span class="text-2xl font-extrabold text-[#60a5fa] tracking-tight flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#34d399]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+          Monitoramento de Energia
+        </span>
+        <div class="flex gap-6">
+          <button class="nav-btn" onclick="showScreen('sobre')">Sobre o Projeto</button>
+          <button class="nav-btn" onclick="showScreen('dashboard')">Dashboard</button>
+        </div>
+      </div>
+    </nav>
+    <div style="height:64px"></div>
+
+    <div id="sobre" class="screen-content w-full max-w-4xl mx-auto mt-10 mb-10 hidden animate-fadein">
+      <div class="bg-[#18181b] rounded-2xl shadow-2xl p-8 border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300">
+        <h2 class="text-3xl font-extrabold mb-6 text-[#60a5fa] text-center flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+          Sobre o Projeto
+        </h2>
+        <p class="text-lg text-gray-300 mb-4 text-center leading-relaxed">
+          Este projeto demonstra como o Arduino pode ser usado para monitorar e gerenciar o consumo de energia. O sistema coleta dados de tensão, corrente e potência, enviando-os para um servidor web em intervalos regulares. O objetivo é facilitar o acompanhamento, controle e auditoria do consumo energético, tornando o uso mais eficiente e seguro.
+        </p>
+        <ul class="list-disc pl-6 text-gray-300 mb-4 space-y-2">
+          <li>Os dados enviados incluem código do equipamento, data, hora, tensão, corrente, potência e status.</li>
+          <li>O retorno da API informa os dias e horários permitidos de uso, potência máxima fora do horário e intervalo de atualização.</li>
+          <li>Os gráficos exibem a variação dos principais parâmetros elétricos ao longo do tempo.</li>
+        </ul>
+        <p class="text-lg text-gray-300 text-center">
+          Ideal para projetos de automação residencial, laboratórios, indústrias e qualquer ambiente que exija controle inteligente do consumo de energia.
+        </p>
+      </div>
+    </div>
+
+    <div id="dashboard" class="screen-content w-full flex flex-col items-center mx-auto animate-fadein">
+      <h1 class="text-4xl font-extrabold mt-10 mb-8 text-center tracking-tight drop-shadow-lg text-[#60a5fa] flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-[#34d399]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+        Monitoramento de Energia
+      </h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl items-start mb-10 mx-auto">
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-8 w-full border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300">
+          <h2 class="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2 text-[#60a5fa]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+            Dados Enviados
+          </h2>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <span class="text-sm text-gray-400">Código:</span>
+              <span id="codigo" class="block text-lg font-bold mt-1 text-white">123456</span>
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Data:</span>
+              <span id="data" class="block text-lg font-bold mt-1 text-white">2025-08-15</span>
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Hora:</span>
+              <span id="hora" class="block text-lg font-bold mt-1 text-white">13:30:32</span>
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Tensão:</span>
+              <span id="tensao" class="block text-lg font-bold mt-1 text-white">127.47 V</span>
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Corrente:</span>
+              <span id="corrente" class="block text-lg font-bold mt-1 text-white">0.35 A</span>
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Potência:</span>
+              <span id="potencia" class="block text-lg font-bold mt-1 text-white">40.11 W</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-8 w-full border border-[#374151] hover:shadow-[#34d399] transition-all duration-300">
+          <h2 class="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2 text-[#34d399]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#34d399]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+            Configurações
+          </h2>
+          <form id="configForm" class="grid grid-cols-2 gap-6 pointer-events-none opacity-80">
+            <div>
+              <span class="text-sm text-gray-400">Status:</span>
+              <input id="apiStatus" class="block text-lg font-bold mt-1 text-green-400 input" value="OK" readonly />
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Dias Monitorados:</span>
+              <button id="btnDiasMonitorados" type="button" class="input w-full text-left font-bold bg-[#23232b] text-white mt-1" disabled>
+                <span id="diasMonitoradosLabel">SEG, TER, QUA, QUI, SEX</span>
+              </button>
+            </div>
+            <div class="col-span-2">
+              <span class="text-sm text-gray-400">Horários Permitidos:</span>
+              <button id="btnHorariosPermitidos" type="button" class="input w-full text-left font-bold bg-[#23232b] text-white mt-1" disabled>
+                <span id="horariosPermitidosLabel">7:00-12:10, 18:30-21:40</span>
+              </button>
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Potência Máxima:</span>
+              <input id="potenciaMaxima" class="block text-lg font-bold mt-1 input" value="150 W" readonly />
+            </div>
+            <div>
+              <span class="text-sm text-gray-400">Intervalo de Atualização:</span>
+              <input id="intervaloAtualizacao" class="block text-lg font-bold mt-1 text-white input" value="30 segundos" readonly />
+            </div>
+          </form>
+          <div class="flex justify-end mt-6">
+            <button id="alterarBtn" type="button" class="px-4 py-2 rounded-lg bg-[#34d399] text-white font-bold hover:bg-[#059669] transition">Alterar</button>
+            <button id="salvarBtn" type="button" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold ml-3 hidden">Salvar</button>
+            <button id="cancelarBtn" type="button" class="px-4 py-2 rounded-lg bg-[#f87171] text-white font-bold ml-3 hidden">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl mt-4 mx-auto">
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300">
+          <h2 class="text-xl font-bold mb-4 text-[#60a5fa] text-center flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+            Gráfico de Tensão
+          </h2>
+          <canvas id="tensaoChart" height="120"></canvas>
+        </div>
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#34d399] transition-all duration-300">
+          <h2 class="text-xl font-bold mb-4 text-[#34d399] text-center flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#34d399]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+            Gráfico de Corrente
+          </h2>
+          <canvas id="correnteChart" height="120"></canvas>
+        </div>
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#f87171] transition-all duration-300">
+          <h2 class="text-xl font-bold mb-4 text-[#f87171] text-center flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#f87171]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
+            Gráfico de Potência
+          </h2>
+          <canvas id="potenciaChart" height="120"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div id="modalSenha" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+      <div class="bg-[#18181b] rounded-xl p-8 shadow-2xl border border-[#374151] w-full max-w-sm">
+        <h3 class="text-xl font-bold mb-4 text-center text-[#60a5fa]">Digite a senha de administrador</h3>
+        <input id="senhaAdmin" type="password" class="input w-full mb-4" placeholder="Senha" />
+        <div class="flex justify-end gap-3">
+          <button id="confirmarSenhaBtn" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">Confirmar</button>
+          <button id="cancelarSenhaBtn" class="px-4 py-2 rounded-lg bg-[#f87171] text-white font-bold">Cancelar</button>
+        </div>
+        <div id="senhaErro" class="text-red-400 text-sm mt-2 hidden text-center">Senha incorreta!</div>
+      </div>
+    </div>
+
+    <div id="modalDias" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+      <div class="bg-[#18181b] rounded-xl p-8 shadow-2xl border border-[#374151] w-full max-w-sm">
+        <h3 class="text-xl font-bold mb-4 text-center text-[#60a5fa]">Selecione os dias monitorados</h3>
+        <div class="flex flex-wrap gap-2 justify-center mb-6">
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="SEG" /><span>SEG</span></label>
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="TER" /><span>TER</span></label>
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="QUA" /><span>QUA</span></label>
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="QUI" /><span>QUI</span></label>
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="SEX" /><span>SEX</span></label>
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="SAB" /><span>SAB</span></label>
+          <label class="dias-btn"><input type="checkbox" class="dias-checkbox-modal" value="DOM" /><span>DOM</span></label>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button id="confirmarDiasBtn" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">Confirmar</button>
+          <button id="cancelarDiasBtn" class="px-4 py-2 rounded-lg bg-[#f87171] text-white font-bold">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modalHorarios" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+      <div class="bg-[#18181b] rounded-xl p-8 shadow-2xl border border-[#374151] w-full max-w-sm">
+        <h3 class="text-xl font-bold mb-4 text-center text-[#60a5fa]">Selecione os horários permitidos</h3>
+        <div class="flex flex-wrap gap-4 justify-center mb-6">
+          <div>
+            <label class="text-xs text-gray-400">Início 1:</label>
+            <input type="time" id="modalHorarioInicio1" class="input w-24" value="07:00" />
+          </div>
+          <div>
+            <label class="text-xs text-gray-400">Fim 1:</label>
+            <input type="time" id="modalHorarioFim1" class="input w-24" value="12:10" />
+          </div>
+          <div>
+            <label class="text-xs text-gray-400">Início 2:</label>
+            <input type="time" id="modalHorarioInicio2" class="input w-24" value="18:30" />
+          </div>
+          <div>
+            <label class="text-xs text-gray-400">Fim 2:</label>
+            <input type="time" id="modalHorarioFim2" class="input w-24" value="21:40" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button id="confirmarHorariosBtn" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">Confirmar</button>
+          <button id="cancelarHorariosBtn" class="px-4 py-2 rounded-lg bg-[#f87171] text-white font-bold">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script>
+      function showScreen(screen) {
+        document.querySelectorAll('.screen-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById(screen).classList.remove('hidden');
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.nav-btn[onclick="showScreen('${screen}')"]`).classList.add('active');
+      }
+      window.addEventListener("DOMContentLoaded", () => {
+        showScreen('dashboard');
+      });
+    </script>
+  </body>
+</html>

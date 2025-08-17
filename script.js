@@ -13,7 +13,7 @@ const retornoAPI = {
   diasMonitorados: "SEG, TER, QUA, QUI, SEX",
   horariosPermitidos: "7:00-12:10, 18:30-21:40",
   potenciaMaxima: "150 W",
-  intervaloAtualizacao: "30 segundos"
+  intervaloAtualizacao: 30
 };
 
 const energiaData = {
@@ -183,7 +183,7 @@ window.addEventListener("DOMContentLoaded", () => {
       retornoAPI.diasMonitorados = tempDiasMonitorados || retornoAPI.diasMonitorados;
       retornoAPI.horariosPermitidos = tempHorariosPermitidos || retornoAPI.horariosPermitidos;
       retornoAPI.potenciaMaxima = document.getElementById("potenciaMaxima").value;
-      retornoAPI.intervaloAtualizacao = document.getElementById("intervaloAtualizacao").value;
+      retornoAPI.intervaloAtualizacao = parseInt(document.getElementById("intervaloAtualizacao").value, 10) || 1;
       preencherDados();
       configForm.classList.add("pointer-events-none", "opacity-80");
       inputs.forEach(i => i.setAttribute("readonly", true));

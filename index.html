@@ -52,7 +52,7 @@
         <div class="bg-[#18181b] rounded-2xl shadow-2xl p-8 w-full border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300">
           <h2 class="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2 text-[#60a5fa]">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
-            Dados Enviados
+            Últimos dados enviados
           </h2>
           <div class="grid grid-cols-2 gap-6">
             <div>
@@ -104,8 +104,8 @@
               </button>
             </div>
             <div>
-              <span class="text-sm text-gray-400">Potência Máxima:</span>
-              <input id="potenciaMaxima" class="block text-lg font-bold mt-1 input" value="150 W" readonly />
+              <span class="text-sm text-gray-400">Potência Máxima (W):</span>
+              <input id="potenciaMaxima" type="number" min="1" class="block text-lg font-bold mt-1 input" value="150" readonly />
             </div>
             <div>
               <span class="text-sm text-gray-400">Intervalo de Atualização (segundos):</span>
@@ -121,26 +121,50 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl mt-4 mx-auto">
-        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300">
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300 relative">
           <h2 class="text-xl font-bold mb-4 text-[#60a5fa] text-center flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
             Gráfico de Tensão
           </h2>
+          <button class="expand-chart absolute top-4 right-4" data-chart="tensao">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V6a2 2 0 012-2h2m8 0h2a2 2 0 012 2v2m0 8v2a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-2"/></svg>
+          </button>
           <canvas id="tensaoChart" height="120"></canvas>
         </div>
-        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#34d399] transition-all duration-300">
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#34d399] transition-all duration-300 relative">
           <h2 class="text-xl font-bold mb-4 text-[#34d399] text-center flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#34d399]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
             Gráfico de Corrente
           </h2>
+          <button class="expand-chart absolute top-4 right-4" data-chart="corrente">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#34d399]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V6a2 2 0 012-2h2m8 0h2a2 2 0 012 2v2m0 8v2a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-2"/></svg>
+          </button>
           <canvas id="correnteChart" height="120"></canvas>
         </div>
-        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#f87171] transition-all duration-300">
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-6 flex flex-col items-center border border-[#374151] hover:shadow-[#f87171] transition-all duration-300 relative">
           <h2 class="text-xl font-bold mb-4 text-[#f87171] text-center flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#f87171]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
             Gráfico de Potência
           </h2>
+          <button class="expand-chart absolute top-4 right-4" data-chart="potencia">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#f87171]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V6a2 2 0 012-2h2m8 0h2a2 2 0 012 2v2m0 8v2a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-2"/></svg>
+          </button>
           <canvas id="potenciaChart" height="120"></canvas>
+        </div>
+      </div>
+
+      <div class="w-full flex justify-center mt-8 mb-4">
+        <div class="bg-[#18181b] rounded-2xl shadow-2xl p-8 w-full max-w-3xl border border-[#374151]">
+          <h2 class="text-2xl font-bold mb-6 text-center text-[#60a5fa]">Gráfico: Tensão, Corrente e Potência</h2>
+          <canvas id="graficoSobrepostoCanvas" height="320"></canvas>
+        </div>
+      </div>
+
+      <div id="modalGraficoSobreposto" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-[#18181b] rounded-2xl p-8 shadow-2xl border border-[#374151] w-full max-w-3xl relative">
+          <button id="fecharModalGraficoSobreposto" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
+          <h2 class="text-2xl font-bold mb-6 text-center text-[#60a5fa]">Gráfico: Tensão, Corrente e Potência</h2>
+          <canvas id="graficoSobrepostoCanvas" height="320"></canvas>
         </div>
       </div>
     </div>
@@ -201,6 +225,24 @@
           <button id="confirmarHorariosBtn" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">Confirmar</button>
           <button id="cancelarHorariosBtn" class="px-4 py-2 rounded-lg bg-[#f87171] text-white font-bold">Cancelar</button>
         </div>
+      </div>
+    </div>
+
+    <div id="modalGrafico" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+      <div class="bg-[#18181b] rounded-2xl p-8 shadow-2xl border border-[#374151] w-full max-w-3xl relative">
+        <button id="fecharModalGrafico" class="absolute top-4 right-4 text-white hover:text-red-400 text-2xl font-bold">&times;</button>
+        <h2 id="modalGraficoTitulo" class="text-2xl font-bold mb-6 text-center"></h2>
+        <div class="flex flex-wrap gap-4 justify-center mb-6">
+          <input type="date" id="filtroDataInicio" class="input w-36" />
+          <input type="date" id="filtroDataFim" class="input w-36" />
+          <select id="filtroEvento" class="input w-44">
+            <option value="">Todos os eventos</option>
+            <option value="disparo">Disparos</option>
+            <option value="normal">Normais</option>
+          </select>
+          <button id="aplicarFiltroGrafico" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">Filtrar</button>
+        </div>
+        <canvas id="modalGraficoCanvas" height="320"></canvas>
       </div>
     </div>
 

@@ -12,16 +12,24 @@ const retornoAPI = {
   status: "OK",
   diasMonitorados: "SEG, TER, QUA, QUI, SEX",
   horariosPermitidos: "7:00-12:10, 18:30-21:40",
-  potenciaMaxima: "150 W",
-  intervaloAtualizacao: 30
+  potenciaMaxima: 150, 
+  intervaloAtualizacao: 30 
 };
 
 const energiaData = {
-  tensao: [127.5, 126.8, 128.0, 127.2, 127.9],
-  corrente: [0.35, 0.37, 0.34, 0.36, 0.35],
-  potencia: [40.1, 41.2, 39.8, 40.5, 40.2],
+  tensao: [15.3, 33.8, 55.0, 90.2, 127.9],
+  corrente: [2.35, 3.37, 2.34, 5.36, 2.35],
+  potencia: [17.1, 20.2, 29.8, 40.5, 100.2],
   timestamps: ["13:00", "13:10", "13:20", "13:30", "13:40"]
 };
+
+function normalizarHora(hora) {
+  if (!hora) return "";
+  let [h, m] = hora.trim().split(":");
+  if (!m) return "";
+  h = h.padStart(2, "0");
+  return `${h}:${m}`;
+}
 
 function preencherDados() {
   document.getElementById("codigo").textContent = dadosEnviados.codigo;
@@ -79,9 +87,165 @@ function inicializarGraficos() {
   criarGrafico("potenciaChart", "Potência", energiaData.potencia, "#f87171");
 }
 
+let modalChartInstance = null;
+
+function abrirModalGrafico(tipo) {
+  const modal = document.getElementById("modalGrafico");
+  const titulo = document.getElementById("modalGraficoTitulo");
+  const canvas = document.getElementById("modalGraficoCanvas");
+  let label, data, color;
+  if (tipo === "tensao") {
+    label = "Tensão";
+    data = energiaData.tensao;
+    color = "#60a5fa";
+    titulo.textContent = "Gráfico de Tensão";
+  } else if (tipo === "corrente") {
+    label = "Corrente";
+    data = energiaData.corrente;
+    color = "#34d399";
+    titulo.textContent = "Gráfico de Corrente";
+  } else {
+    label = "Potência";
+    data = energiaData.potencia;
+    color = "#f87171";
+    titulo.textContent = "Gráfico de Potência";
+  }
+  if (modalChartInstance) {
+    modalChartInstance.destroy();
+  }
+  modalChartInstance = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: energiaData.timestamps,
+      datasets: [
+        {
+          label: label,
+          data: data,
+          borderColor: color,
+          backgroundColor: `${color}33`,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: color
+        }
+      ]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.raw} ${label === "Potência" ? "W" : label === "Tensão" ? "V" : "A"}`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: "#fff" } },
+        y: { grid: { color: "#374151" }, ticks: { color: "#fff" } }
+      }
+    }
+  });
+  modal.classList.remove("hidden");
+}
+
+function criarGraficoSobreposto() {
+  const canvas = document.getElementById("graficoSobrepostoCanvas");
+  if (!canvas) return;
+
+  if (window.sobrepostoChartInstance) {
+    window.sobrepostoChartInstance.destroy();
+  }
+
+  window.sobrepostoChartInstance = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: energiaData.timestamps,
+      datasets: [
+        {
+          label: "Tensão (V)",
+          data: energiaData.tensao,
+          borderColor: "#60a5fa",
+          backgroundColor: "#60a5fa33",
+          fill: false,
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: "#60a5fa",
+          yAxisID: "yTensao"
+        },
+        {
+          label: "Corrente (A)",
+          data: energiaData.corrente,
+          borderColor: "#34d399",
+          backgroundColor: "#34d39933",
+          fill: false,
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: "#34d399",
+          yAxisID: "yCorrente"
+        },
+        {
+          label: "Potência (W)",
+          data: energiaData.potencia,
+          borderColor: "#f87171",
+          backgroundColor: "#f8717133",
+          fill: false,
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: "#f87171",
+          yAxisID: "yPotencia"
+        }
+      ]
+    },
+    options: {
+      plugins: {
+        legend: { display: true, labels: { color: "#fff" } },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              if (context.dataset.label.includes("Potência")) return `${context.raw} W`;
+              if (context.dataset.label.includes("Tensão")) return `${context.raw} V`;
+              if (context.dataset.label.includes("Corrente")) return `${context.raw} A`;
+              return context.raw;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: "#fff" } },
+        yTensao: {
+          type: "linear",
+          display: true,
+          position: "left",
+          title: { display: true, text: "Tensão (V)", color: "#60a5fa" },
+          ticks: { color: "#60a5fa" },
+          grid: { color: "#374151" }
+        },
+        yCorrente: {
+          type: "linear",
+          display: true,
+          position: "right",
+          title: { display: true, text: "Corrente (A)", color: "#34d399" },
+          ticks: { color: "#34d399" },
+          grid: { drawOnChartArea: false }
+        },
+        yPotencia: {
+          type: "linear",
+          display: true,
+          position: "right",
+          offset: true,
+          title: { display: true, text: "Potência (W)", color: "#f87171" },
+          ticks: { color: "#f87171" },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   preencherDados();
   inicializarGraficos();
+  criarGraficoSobreposto();
 
   const alterarBtn = document.getElementById("alterarBtn");
   const salvarBtn = document.getElementById("salvarBtn");
@@ -146,11 +310,17 @@ window.addEventListener("DOMContentLoaded", () => {
   btnHorariosPermitidos.onclick = () => {
     const modal = document.getElementById("modalHorarios");
     modal.classList.remove("hidden");
-    const horarios = (tempHorariosPermitidos || retornoAPI.horariosPermitidos).split(',');
-    document.getElementById("modalHorarioInicio1").value = horarios[0]?.split('-')[0] || "07:00";
-    document.getElementById("modalHorarioFim1").value = horarios[0]?.split('-')[1] || "12:10";
-    document.getElementById("modalHorarioInicio2").value = horarios[1]?.split('-')[0] || "18:30";
-    document.getElementById("modalHorarioFim2").value = horarios[1]?.split('-')[1] || "21:40";
+
+    let horarios = tempHorariosPermitidos || retornoAPI.horariosPermitidos;
+    if (!horarios || !horarios.includes("-")) {
+      horarios = "07:00-12:10,18:30-21:40";
+    }
+    const partes = horarios.split(',');
+
+    document.getElementById("modalHorarioInicio1").value = normalizarHora(partes[0]?.split('-')[0]) || "07:00";
+    document.getElementById("modalHorarioFim1").value   = normalizarHora(partes[0]?.split('-')[1]) || "12:10";
+    document.getElementById("modalHorarioInicio2").value = normalizarHora(partes[1]?.split('-')[0]) || "18:30";
+    document.getElementById("modalHorarioFim2").value   = normalizarHora(partes[1]?.split('-')[1]) || "21:40";
   };
   document.getElementById("cancelarHorariosBtn").onclick = () => {
     document.getElementById("modalHorarios").classList.add("hidden");
@@ -182,7 +352,7 @@ window.addEventListener("DOMContentLoaded", () => {
       retornoAPI.status = document.getElementById("apiStatus").value;
       retornoAPI.diasMonitorados = tempDiasMonitorados || retornoAPI.diasMonitorados;
       retornoAPI.horariosPermitidos = tempHorariosPermitidos || retornoAPI.horariosPermitidos;
-      retornoAPI.potenciaMaxima = document.getElementById("potenciaMaxima").value;
+      retornoAPI.potenciaMaxima = parseInt(document.getElementById("potenciaMaxima").value, 10) || 1;
       retornoAPI.intervaloAtualizacao = parseInt(document.getElementById("intervaloAtualizacao").value, 10) || 1;
       preencherDados();
       configForm.classList.add("pointer-events-none", "opacity-80");
@@ -199,6 +369,58 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("senhaErro").classList.remove("hidden");
     }
   };
+
+  document.querySelectorAll('.expand-chart').forEach(btn => {
+    btn.onclick = () => abrirModalGrafico(btn.dataset.chart);
+  });
+  document.getElementById("fecharModalGrafico").onclick = () => {
+    document.getElementById("modalGrafico").classList.add("hidden");
+    if (modalChartInstance) {
+      modalChartInstance.destroy();
+      modalChartInstance = null;
+    }
+  };
+
+  document.getElementById("aplicarFiltroGrafico").onclick = () => {
+    mostrarAviso("Filtro aplicado.");
+  };
+
+  const btnSobreposto = document.getElementById("btnGraficoSobreposto");
+  if (btnSobreposto) {
+    btnSobreposto.onclick = criarGraficoSobreposto;
+  }
+
+  const fecharSobreposto = document.getElementById("fecharModalGraficoSobreposto");
+  if (fecharSobreposto) {
+    fecharSobreposto.onclick = () => {
+      document.getElementById("modalGraficoSobreposto").classList.add("hidden");
+      if (window.sobrepostoChartInstance) {
+        window.sobrepostoChartInstance.destroy();
+        window.sobrepostoChartInstance = null;
+      }
+    };
+  }
 });
 
-window.addEventListener("DOMContentLoaded", startCreditTyping);
+function mostrarAviso(msg) {
+  let aviso = document.getElementById("modalAviso");
+  if (!aviso) {
+    aviso = document.createElement("div");
+    aviso.id = "modalAviso";
+    aviso.className = "fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50";
+    aviso.innerHTML = `
+      <div class="bg-[#18181b] rounded-xl p-8 shadow-2xl border border-[#374151] w-full max-w-xs flex flex-col items-center">
+        <span class="text-lg font-bold text-[#60a5fa] mb-2">Aviso</span>
+        <div class="text-white text-center mb-4" id="modalAvisoMsg"></div>
+        <button id="fecharModalAviso" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">OK</button>
+      </div>
+    `;
+    document.body.appendChild(aviso);
+    aviso.querySelector("#fecharModalAviso").onclick = () => {
+      aviso.classList.add("hidden");
+    };
+  }
+  aviso.querySelector("#modalAvisoMsg").textContent = msg;
+  aviso.classList.remove("hidden");
+}
+

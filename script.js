@@ -16,12 +16,57 @@ const retornoAPI = {
   intervaloAtualizacao: 30 
 };
 
-const energiaData = {
-  tensao: [15.3, 33.8, 55.0, 90.2, 127.9],
-  corrente: [2.35, 3.37, 2.34, 5.36, 2.35],
-  potencia: [17.1, 20.2, 29.8, 40.5, 100.2],
-  timestamps: ["13:00", "13:10", "13:20", "13:30", "13:40"]
-};
+function gerarDadosReais(qtd, inicio) {
+  const tensao = [];
+  const corrente = [];
+  const potencia = [];
+  const timestamps = [];
+  let data = inicio ? new Date(inicio) : new Date();
+  data.setMinutes(0, 0, 0);
+
+  for (let i = 0; i < qtd; i++) {
+    const v = 127 + Math.sin(i / 20) * 2 + Math.random() * 1.5;
+    const a = 0.2 + Math.abs(Math.sin(i / 13) * 0.5) + Math.random() * 0.1;
+    const w = v * a * (0.97 + Math.random() * 0.03);
+
+    tensao.push(Number(v.toFixed(2)));
+    corrente.push(Number(a.toFixed(2)));
+    potencia.push(Number(w.toFixed(2)));
+
+    const h = data.getHours().toString().padStart(2, "0");
+    const m = data.getMinutes().toString().padStart(2, "0");
+    timestamps.push(`${h}:${m}`);
+    data.setMinutes(data.getMinutes() + 2);
+  }
+  return { tensao, corrente, potencia, timestamps };
+}
+let energiaData = gerarDadosReais(60);
+function atualizarDadosGrafico() {
+  const ultIndex = energiaData.tensao.length - 1;
+  const lastTime = energiaData.timestamps[ultIndex];
+  let [h, m] = lastTime.split(":").map(Number);
+  m += 2;
+  if (m >= 60) { h++; m = m % 60; }
+  if (h >= 24) h = 0;
+  const novoTimestamp = `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+  const v = 127 + Math.sin(ultIndex / 20) * 2 + Math.random() * 1.5;
+  const a = 0.2 + Math.abs(Math.sin(ultIndex / 13) * 0.5) + Math.random() * 0.1;
+  const w = v * a * (0.97 + Math.random() * 0.03);
+
+  energiaData.tensao.push(Number(v.toFixed(2)));
+  energiaData.corrente.push(Number(a.toFixed(2)));
+  energiaData.potencia.push(Number(w.toFixed(2)));
+  energiaData.timestamps.push(novoTimestamp);
+
+  if (energiaData.tensao.length > 120) {
+    energiaData.tensao.shift();
+    energiaData.corrente.shift();
+    energiaData.potencia.shift();
+    energiaData.timestamps.shift();
+  }
+
+  criarGraficoSobreposto();
+}
 
 function normalizarHora(hora) {
   if (!hora) return "";
@@ -45,52 +90,7 @@ function preencherDados() {
   document.getElementById("horariosPermitidosLabel").textContent = retornoAPI.horariosPermitidos;
 }
 
-function criarGrafico(id, label, data, color) {
-  const ctx = document.getElementById(id).getContext("2d");
-  new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: energiaData.timestamps,
-      datasets: [
-        {
-          label: label,
-          data: data,
-          borderColor: color,
-          backgroundColor: `${color}33`,
-          fill: true,
-          tension: 0.4,
-          pointRadius: 4,
-          pointBackgroundColor: color
-        }
-      ]
-    },
-    options: {
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (context) => `${context.raw} ${label === "Potência" ? "W" : label === "Tensão" ? "V" : "A"}`
-          }
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: "#fff" } },
-        y: { grid: { color: "#374151" }, ticks: { color: "#fff" } }
-      }
-    }
-  });
-}
-
-function inicializarGraficos() {
-  criarGrafico("tensaoChart", "Tensão", energiaData.tensao, "#60a5fa");
-  criarGrafico("correnteChart", "Corrente", energiaData.corrente, "#34d399");
-  criarGrafico("potenciaChart", "Potência", energiaData.potencia, "#f87171");
-}
-
-let modalChartInstance = null;
-
 function abrirModalGrafico(tipo) {
-  const modal = document.getElementById("modalGrafico");
   const titulo = document.getElementById("modalGraficoTitulo");
   const canvas = document.getElementById("modalGraficoCanvas");
   let label, data, color;
@@ -145,7 +145,6 @@ function abrirModalGrafico(tipo) {
       }
     }
   });
-  modal.classList.remove("hidden");
 }
 
 function criarGraficoSobreposto() {
@@ -155,6 +154,11 @@ function criarGraficoSobreposto() {
   if (window.sobrepostoChartInstance) {
     window.sobrepostoChartInstance.destroy();
   }
+  
+  const total = energiaData.timestamps.length;
+  const initialPoints = 8;
+  const initialMin = total > initialPoints ? total - initialPoints : 0;
+  const initialMax = total - 1;
 
   window.sobrepostoChartInstance = new Chart(canvas, {
     type: "line",
@@ -165,41 +169,62 @@ function criarGraficoSobreposto() {
           label: "Tensão (V)",
           data: energiaData.tensao,
           borderColor: "#60a5fa",
-          backgroundColor: "#60a5fa33",
+          backgroundColor: "rgba(96,165,250,0.12)",
           fill: false,
-          tension: 0.4,
-          pointRadius: 2,
+          tension: 0.45,
+          pointRadius: 0,
+          pointHoverRadius: 6, 
           pointBackgroundColor: "#60a5fa",
+          borderWidth: 3,
           yAxisID: "yTensao"
         },
         {
           label: "Corrente (A)",
           data: energiaData.corrente,
           borderColor: "#34d399",
-          backgroundColor: "#34d39933",
+          backgroundColor: "rgba(52,211,153,0.12)",
           fill: false,
-          tension: 0.4,
-          pointRadius: 2,
+          tension: 0.45,
+          pointRadius: 0,
+          pointHoverRadius: 6,
           pointBackgroundColor: "#34d399",
+          borderWidth: 3,
           yAxisID: "yCorrente"
         },
         {
           label: "Potência (W)",
           data: energiaData.potencia,
           borderColor: "#f87171",
-          backgroundColor: "#f8717133",
+          backgroundColor: "rgba(248,113,113,0.12)",
           fill: false,
-          tension: 0.4,
-          pointRadius: 2,
+          tension: 0.45,
+          pointRadius: 0,
+          pointHoverRadius: 6,
           pointBackgroundColor: "#f87171",
+          borderWidth: 3,
           yAxisID: "yPotencia"
         }
       ]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, labels: { color: "#fff" } },
+        legend: {
+          display: true,
+          labels: {
+            color: "#fff",
+            font: { size: 16, family: "'Segoe UI','Roboto','Arial',sans-serif" },
+            padding: 20
+          }
+        },
         tooltip: {
+          backgroundColor: "#23232b",
+          titleColor: "#60a5fa",
+          bodyColor: "#fff",
+          borderColor: "#60a5fa",
+          borderWidth: 1,
+          padding: 12,
           callbacks: {
             label: function(context) {
               if (context.dataset.label.includes("Potência")) return `${context.raw} W`;
@@ -208,24 +233,55 @@ function criarGraficoSobreposto() {
               return context.raw;
             }
           }
+        },
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'x',
+            modifierKey: 'ctrl',
+          },
+          zoom: {
+            wheel: { enabled: true },
+            pinch: { enabled: true },
+            mode: 'x',
+            drag: { enabled: true }
+          },
+          limits: {
+            x: { minRange: 5 }
+          }
         }
       },
+      layout: {
+        padding: { left: 10, right: 10, top: 10, bottom: 10 }
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: false
+      },
       scales: {
-        x: { grid: { display: false }, ticks: { color: "#fff" } },
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: "#cbd5e1",
+            font: { size: 14, family: "'Segoe UI','Roboto','Arial',sans-serif" }
+          },
+          min: initialMin,
+          max: initialMax
+        },
         yTensao: {
           type: "linear",
           display: true,
           position: "left",
-          title: { display: true, text: "Tensão (V)", color: "#60a5fa" },
-          ticks: { color: "#60a5fa" },
-          grid: { color: "#374151" }
+          title: { display: true, text: "Tensão (V)", color: "#60a5fa", font: { size: 15, weight: "bold" } },
+          ticks: { color: "#60a5fa", font: { size: 13 } },
+          grid: { color: "#374151", borderDash: [4, 4] }
         },
         yCorrente: {
           type: "linear",
           display: true,
           position: "right",
-          title: { display: true, text: "Corrente (A)", color: "#34d399" },
-          ticks: { color: "#34d399" },
+          title: { display: true, text: "Corrente (A)", color: "#34d399", font: { size: 15, weight: "bold" } },
+          ticks: { color: "#34d399", font: { size: 13 } },
           grid: { drawOnChartArea: false }
         },
         yPotencia: {
@@ -233,19 +289,43 @@ function criarGraficoSobreposto() {
           display: true,
           position: "right",
           offset: true,
-          title: { display: true, text: "Potência (W)", color: "#f87171" },
-          ticks: { color: "#f87171" },
+          title: { display: true, text: "Potência (W)", color: "#f87171", font: { size: 15, weight: "bold" } },
+          ticks: { color: "#f87171", font: { size: 13 } },
           grid: { drawOnChartArea: false }
         }
       }
     }
   });
+
+  function setZoomButtons() {
+    const chart = window.sobrepostoChartInstance;
+    const zoomInBtn = document.getElementById("zoomInBtn");
+    const zoomOutBtn = document.getElementById("zoomOutBtn");
+    const resetZoomBtn = document.getElementById("resetZoomBtn");
+    if (chart && chart.resetZoom && zoomInBtn && zoomOutBtn && resetZoomBtn) {
+      zoomInBtn.onclick = () => {
+        chart.zoom({x: 1.2});
+      };
+      zoomOutBtn.onclick = () => {
+        chart.zoom({x: 0.8});
+      };
+      resetZoomBtn.onclick = () => {
+        chart.options.scales.x.min = undefined;
+        chart.options.scales.x.max = undefined;
+        chart.resetZoom();
+        chart.update();
+      };
+    } else {
+      setTimeout(setZoomButtons, 100);
+    }
+  }
+  setZoomButtons();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   preencherDados();
-  inicializarGraficos();
   criarGraficoSobreposto();
+  setInterval(atualizarDadosGrafico, 30000);
 
   const alterarBtn = document.getElementById("alterarBtn");
   const salvarBtn = document.getElementById("salvarBtn");
@@ -369,58 +449,4 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("senhaErro").classList.remove("hidden");
     }
   };
-
-  document.querySelectorAll('.expand-chart').forEach(btn => {
-    btn.onclick = () => abrirModalGrafico(btn.dataset.chart);
-  });
-  document.getElementById("fecharModalGrafico").onclick = () => {
-    document.getElementById("modalGrafico").classList.add("hidden");
-    if (modalChartInstance) {
-      modalChartInstance.destroy();
-      modalChartInstance = null;
-    }
-  };
-
-  document.getElementById("aplicarFiltroGrafico").onclick = () => {
-    mostrarAviso("Filtro aplicado.");
-  };
-
-  const btnSobreposto = document.getElementById("btnGraficoSobreposto");
-  if (btnSobreposto) {
-    btnSobreposto.onclick = criarGraficoSobreposto;
-  }
-
-  const fecharSobreposto = document.getElementById("fecharModalGraficoSobreposto");
-  if (fecharSobreposto) {
-    fecharSobreposto.onclick = () => {
-      document.getElementById("modalGraficoSobreposto").classList.add("hidden");
-      if (window.sobrepostoChartInstance) {
-        window.sobrepostoChartInstance.destroy();
-        window.sobrepostoChartInstance = null;
-      }
-    };
-  }
 });
-
-function mostrarAviso(msg) {
-  let aviso = document.getElementById("modalAviso");
-  if (!aviso) {
-    aviso = document.createElement("div");
-    aviso.id = "modalAviso";
-    aviso.className = "fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50";
-    aviso.innerHTML = `
-      <div class="bg-[#18181b] rounded-xl p-8 shadow-2xl border border-[#374151] w-full max-w-xs flex flex-col items-center">
-        <span class="text-lg font-bold text-[#60a5fa] mb-2">Aviso</span>
-        <div class="text-white text-center mb-4" id="modalAvisoMsg"></div>
-        <button id="fecharModalAviso" class="px-4 py-2 rounded-lg bg-[#2563eb] text-white font-bold">OK</button>
-      </div>
-    `;
-    document.body.appendChild(aviso);
-    aviso.querySelector("#fecharModalAviso").onclick = () => {
-      aviso.classList.add("hidden");
-    };
-  }
-  aviso.querySelector("#modalAvisoMsg").textContent = msg;
-  aviso.classList.remove("hidden");
-}
-

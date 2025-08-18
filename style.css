@@ -100,9 +100,9 @@ button {
   cursor: pointer;
   transition: background-color 0.2s;
 }
-button:hover {
+/*button:hover {
   background-color: #2563eb;
-}
+}*/
 
 .bg-18181b {
   background-color: #18181b !important;

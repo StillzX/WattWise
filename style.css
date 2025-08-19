@@ -131,12 +131,40 @@ h1, h2, h3 {
 
 canvas {
   max-width: 100% !important;
-  height: auto !important;
+  width: 100% !important;
+  min-width: 320px;
+  height: 320px !important;
   background: #23232b;
   border-radius: 1rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   box-shadow: 0 2px 12px 0 rgba(96,165,250,0.08);
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .bg-18181b > div[style*="overflow-x:auto;"] {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  #graficoSobrepostoCanvas,
+  canvas#graficoSobrepostoCanvas {
+    min-width: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 220px !important;
+  }
+  .bg-18181b {
+    padding-left: 0.2rem !important;
+    padding-right: 0.2rem !important;
+  }
+}
+
+@media (max-width: 400px) {
+  #graficoSobrepostoCanvas,
+  canvas#graficoSobrepostoCanvas {
+    height: 160px !important;
+  }
 }
 
 .grid {

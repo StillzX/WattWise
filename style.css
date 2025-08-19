@@ -144,6 +144,7 @@ canvas {
   gap: 2rem;
 }
 
+/* RESPONSIVIDADE */
 @media (max-width: 1023px) {
   .grid-cols-3 {
     grid-template-columns: 1fr !important;

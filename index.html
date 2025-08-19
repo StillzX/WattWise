@@ -23,25 +23,35 @@
     </nav>
     <div style="height:64px"></div>
 
-    <div id="sobre" class="screen-content w-full max-w-4xl mx-auto mt-10 mb-10 hidden animate-fadein">
-      <div class="bg-[#18181b] rounded-2xl shadow-2xl p-8 border border-[#374151] hover:shadow-[#60a5fa] transition-all duration-300">
-        <h2 class="text-3xl font-extrabold mb-6 text-[#60a5fa] text-center flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>
-          Sobre o Projeto
+    <!-- COMEÇO "SOBRE O PROJETO" -->
+    <div id="sobre" class="screen-content w-full mt-20 mb-10 hidden animate-fadein">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-extrabold mb-10 text-[#60a5fa] text-center flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>Mas afinal, para que serve o WattWise?
         </h2>
-        <p class="text-lg text-gray-300 mb-4 text-center leading-relaxed">
-          Este projeto demonstra como o Arduino pode ser usado para monitorar e gerenciar o consumo de energia. O sistema coleta dados de tensão, corrente e potência, enviando-os para um servidor web em intervalos regulares. O objetivo é facilitar o acompanhamento, controle e auditoria do consumo energético, tornando o uso mais eficiente e seguro.
+        <p class="text-lg text-gray-300 mb-4 text-justify leading-relaxed">Este projeto demonstra como o Arduino pode ser usado para monitorar e gerenciar o consumo de energia elétrica de forma prática e eficiente. O sistema coleta dados de tensão e corrente em intervalos regulares e os envia para um servidor web, permitindo o acompanhamento em tempo real do consumo energético.
         </p>
-        <ul class="list-disc pl-6 text-gray-300 mb-4 space-y-2">
-          <li>Os dados enviados incluem código do equipamento, data, hora, tensão, corrente, potência e status.</li>
-          <li>O retorno da API informa os dias e horários permitidos de uso, potência máxima fora do horário e intervalo de atualização.</li>
-          <li>Os gráficos exibem a variação dos principais parâmetros elétricos ao longo do tempo.</li>
-        </ul>
-        <p class="text-lg text-gray-300 text-center">
-          Ideal para projetos de automação residencial, laboratórios, indústrias e qualquer ambiente que exija controle inteligente do consumo de energia.
+        <p class="text-lg text-gray-300 mb-4 text-justify leading-relaxed">O ciclo contínuo de coleta garante que as medições sejam precisas e consistentes, possibilitando a análise de padrões de consumo ao longo do tempo. Além disso, o projeto pode ser integrado a outros sensores e módulos, tornando o gerenciamento de energia mais inteligente e automatizado.
+        </p>
+        <p class="text-lg text-gray-300 mb-4 text-justify leading-relaxed">Dessa forma, a solução não só ajuda a reduzir custos, mas também incentiva práticas mais conscientes e sustentáveis no uso da eletricidade.
         </p>
       </div>
+      
+      <div class="w-full bg-[#18181b] border-t border-b border-[#374151] py-10 mt-20"> 
+        <div class="max-w-7xl mx-auto px-6">
+          <h2 class="text-3xl font-extrabold text-[#60a5fa] text-center flex items-center justify-center gap-2 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>Mas afinal, para que serve o WattWise?
+          </h2>
+          <p class="text-lg text-gray-300 mb-4 text-justify leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe voluptatem laborum molestiae eius sapiente ipsum porro tenetur doloremque quisquam magni alias fugiat obcaecati culpa qui, dolorum explicabo optio adipisci in.
+          </p>
+          <p class="text-lg text-gray-300 mb-4 text-justify leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe voluptatem laborum molestiae eius sapiente ipsum porro tenetur doloremque quisquam magni alias fugiat obcaecati culpa qui, dolorum explicabo optio adipisci in.
+          </p>
+          <p class="text-lg text-gray-300 mb-0 text-justify leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe voluptatem laborum molestiae eius sapiente ipsum porro tenetur doloremque quisquam magni alias fugiat obcaecati culpa qui, dolorum explicabo optio adipisci in.
+          </p>
+        </div>
+      </div>
     </div>
+    <!-- FIM "SOBRE O PROJETO" -->
 
     <div id="dashboard" class="screen-content w-full flex flex-col items-center mx-auto animate-fadein px-2">
       <h1 class="text-4xl font-extrabold mt-10 mb-8 text-center tracking-tight drop-shadow-lg text-[#60a5fa] flex items-center justify-center gap-2">

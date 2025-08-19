@@ -23,8 +23,8 @@
     </nav>
     <div style="height:64px"></div>
 
-    <!-- COMEÇO "SOBRE O PROJETO" -->
-    <div id="sobre" class="screen-content w-full mt-20 mb-10 hidden animate-fadein">
+    <!-- COMEÇO DA SEÇÃO "SOBRE O PROJETO" -->
+    <div id="sobre" class="screen-content w-full mt-20 mb-10 hidden animate-fadein"> <!-- COMEÇO DO CONTAINER PRINCIPAL "SOBRE O PROJETO" -->
       <div class="max-w-4xl mx-auto">
         <h2 class="text-3xl font-extrabold mb-10 text-[#60a5fa] text-center flex items-center justify-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>Mas afinal, para que serve o WattWise?
@@ -37,8 +37,36 @@
         </p>
       </div>
 
-      <div class="w-full bg-[#18181b] border-t border-b border-[#374151] py-10 mt-20"> 
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-3 gap-20 items-start">
+      <div class="relative w-full bg-[#18181b] border-t border-b border-[#374151] py-10 mt-20 overflow-hidden"> 
+        <div class="absolute bottom-0 left-0 w-full h-40 overflow-hidden leading-none">
+          <svg class="relative block w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 140">
+            <path d="M0,0 C300,120 900,-20 1200,100 L1200 00 L0 0 Z" fill="rgba(96,206,250,0.25)">
+              <animate attributeName="d" dur="12s" repeatCount="indefinite"
+                values="
+                  M0,0 C300,120 900,-20 1200,100 L1200 00 L0 0 Z;
+                  M0,60 C400,-20 800,160 1200,60 L1200 00 L0 0 Z;
+                  M0,0 C300,120 900,-20 1200,100 L1200 00 L0 0 Z
+                " />
+            </path>
+            <path d="M0,0 C400,70 800,140 1200,70 L1200 00 L0 0 Z" fill="rgba(56,152,236,0.3)">
+              <animate attributeName="d" dur="10s" repeatCount="indefinite"
+                values="
+                  M0,0 C400,70 800,140 1200,70 L1200 00 L0 0 Z;
+                  M0,40 C500,100 700,-20 1200,90 L1200 00 L0 0 Z;
+                  M0,0 C400,70 800,140 1200,70 L1200 00 L0 0 Z
+                " />
+            </path>
+            <path d="M0,0 C200,100 1000,40 1200,120 L1200 00 L0 0 Z" fill="rgba(37,99,235,0.35)">
+              <animate attributeName="d" dur="14s" repeatCount="indefinite"
+                values="
+                  M0,0 C200,100 1000,40 1200,120 L1200 00 L0 0 Z;
+                  M0,50 C300,-10 900,140 1200,80 L1200 00 L0 0 Z;
+                  M0,0 C200,100 1000,40 1200,120 L1200 00 L0 0 Z
+                " />
+            </path>
+          </svg>
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-3 gap-20 items-start">
             <div class="col-span-1">
               <img src="Images/hardware WattWise.jpg" alt="Descrição da Imagem" class="w-full h-auto rounded-lg">
               <p class="text-sm text-center text-gray-400 mt-2">
@@ -50,20 +78,48 @@
               <h2 class="text-3xl text-center font-extrabold text-[#60a5fa] mb-6">
                 Motivação para criação do projeto
               </h2>
-              <p class="text-lg text-justify text-gray-300 mb-4 leading-relaxed">
-                O coordenador do curso técnico de Informática da nossa escola nos relatou um problema de desperdício de energia. É comum que os computadores dos laboratórios sejam ligados de manhã e esquecidos até à noite, resultando em um consumo energético desnecessário que prejudica tanto a economia quanto o meio ambiente.
+              <p class="text-lg text-justify text-gray-300 mb-4 leading-relaxed">O coordenador do curso técnico de Informática da nossa escola nos relatou um problema de desperdício de energia. É comum que os computadores dos laboratórios sejam ligados de manhã e esquecidos até à noite, resultando em um consumo energético desnecessário que prejudica tanto a economia quanto o meio ambiente.
               </p>
-              <p class="text-lg text-justify text-gray-300 mb-4 leading-relaxed">
-                 Essa ineficiência nos motivou a criar uma solução prática. Nosso projeto demonstra como o Arduino pode ser usado para monitorar e gerenciar o consumo de energia de forma eficiente. O sistema coleta dados de tensão e corrente em tempo real e os envia para um servidor web, permitindo o acompanhamento do consumo energético.
+              <p class="text-lg text-justify text-gray-300 mb-4 leading-relaxed">Essa ineficiência nos motivou a criar uma solução prática. Nosso projeto demonstra como o Arduino pode ser usado para monitorar e gerenciar o consumo de energia de forma eficiente. O sistema coleta dados de tensão e corrente em tempo real e os envia para um servidor web, permitindo o acompanhamento do consumo energético.
               </p>
-              <p class="text-lg text-justify text-gray-300 mb-4 leading-relaxed">
-                Com essa análise precisa, podemos identificar o desperdício e agir para reduzi-lo. A solução não apenas ajuda a diminuir custos, mas também promove a conscientização sobre o uso sustentável da eletricidade na comunidade escolar, incentivando práticas mais responsáveis.
+              <p class="text-lg text-justify text-gray-300 mb-4 leading-relaxed">Com essa análise precisa, podemos identificar o desperdício e agir para reduzi-lo. A solução não apenas ajuda a diminuir custos, mas também promove a conscientização sobre o uso sustentável da eletricidade na comunidade escolar, incentivando práticas mais responsáveis.
               </p>
             </div>
         </div>
       </div>
-    </div>
-    <!-- FIM "SOBRE O PROJETO" -->
+
+      <div class="max-w-7xl mx-auto mt-20">
+        <h2 class="text-3xl font-extrabold mb-10 text-[#60a5fa] text-center flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-1v-4h-1m-4 0h-1v-4h-1m4 0h-1v-4h-1"/></svg>E como o sistema funciona?
+        </h2>
+        <p class="text-lg text-gray-300 mb-4 text-center leading-relaxed">O processo pode ser dividido em três etapas principais: coleta de dados, envio e processamento, e recebimento de configurações.
+        </p>
+        <div class="flex flex-col md:flex-row gap-6 min-h-80 mt-10">
+          <div class="flex items-center justify-center bg-gray-800 p-6 rounded-lg shadow-lg flex-1 relative group overflow-hidden transition-all duration-300 transform hover:scale-105 hover:bg-gray-700">
+            <h3 class="text-xl font-bold text-[#34d399] text-center mb-4">Coleta de Dados</h3>
+            <div class="absolute inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p class="text-gray-300 text-sm md:text-base">O Arduino coleta informações de tensão e corrente elétrica em tempo real. Esses dados são essenciais para calcular o consumo de energia do aparelho ou circuito que está sendo monitorado. Além disso, o Arduino registra a data e a hora exatas da coleta e gera um código único para cada dispositivo, garantindo que os dados sejam identificados corretamente.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center justify-center bg-gray-800 p-6 rounded-lg shadow-lg flex-1 relative group overflow-hidden transition-all duration-300 transform hover:scale-105 hover:bg-gray-700 ">
+            <h3 class="text-xl font-bold text-[#34d399] text-center mb-4">Envio e Processamento (via GET)</h3>
+            <div class="absolute inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p class="text-gray-300 text-sm md:text-base">Os dados coletados são enviados para um servidor web através de uma requisição GET, um método simples para enviar informações pela URL. A requisição contém os dados estruturados com um código do dispositivo, data, hora, tensão, corrente e um status de operação.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center justify-center bg-gray-800 p-6 rounded-lg shadow-lg flex-1 relative group overflow-hidden transition-all duration-300 transform hover:scale-105 hover:bg-gray-700">
+            <h3 class="text-xl font-bold text-[#34d399] text-center mb-4">Recebimento de Configurações</h3>
+            <div class="absolute inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p class="text-gray-300 text-sm md:text-base">Ao receber essa requisição, o servidor web, por meio do arquivo em PHP onde contém a API, processa os dados e os armazena em um banco de dados. Isso permite que o histórico de consumo seja salvo e possa ser visualizado ou analisado posteriormente. A resposta do servidor informa o status da operação, se foi concluída com sucesso (OK) ou se ocorreu algum problema.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  <!-- FIM DO CONTAINER PRINCIPAL "SOBRE O PROJETO"-->
+    <!-- FIM DA SEÇÃO "SOBRE O PROJETO" -->
 
     <div id="dashboard" class="screen-content w-full flex flex-col items-center mx-auto animate-fadein px-2">
       <h1 class="text-4xl font-extrabold mt-10 mb-8 text-center tracking-tight drop-shadow-lg text-[#60a5fa] flex items-center justify-center gap-2">

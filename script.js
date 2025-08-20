@@ -13,7 +13,40 @@ const retornoAPI = {
   diasMonitorados: "SEG, TER, QUA, QUI, SEX",
   horariosPermitidos: "7:00-12:10, 18:30-21:40",
   potenciaMaxima: 150, 
-  intervaloAtualizacao: 30 
+  intervaloAtualizacao: 30
+};
+
+function receberDadosConfiguracao() {
+  //
+};
+
+function enviarDadosConfiguracao() {
+
+  dataAPI = JSON.stringify({
+      status: retornoAPI.status,
+      dias_monitorados: retornoAPI.diasMonitorados,
+      horarios_permitidos: retornoAPI.horariosPermitidos,
+      potencia_maxima: retornoAPI.potenciaMaxima,
+      intervalo_atualizacao: retornoAPI.intervaloAtualizacao
+  });
+
+  fetch('http://45.187.127.77/energia/save_settings.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: dataAPI
+    })
+    .then(response => {
+      if (!response.ok) {
+        alert('Erro ao enviar dados: ' + response.statusText);
+      }
+      return response.json();
+    }).then(data => {
+      console.log('Dados enviados com sucesso:', data);
+    }).catch(error => {
+      console.error('Erro ao enviar dados:', error);
+    });
 };
 
 function gerarDadosReais(qtd, inicio) {
@@ -154,7 +187,7 @@ function criarGraficoSobreposto() {
   if (window.sobrepostoChartInstance) {
     window.sobrepostoChartInstance.destroy();
   }
-  
+
   const total = energiaData.timestamps.length;
   const initialPoints = 8;
   const initialMin = total > initialPoints ? total - initialPoints : 0;
@@ -173,7 +206,7 @@ function criarGraficoSobreposto() {
           fill: false,
           tension: 0.45,
           pointRadius: 0,
-          pointHoverRadius: 6, 
+          pointHoverRadius: 6,
           pointBackgroundColor: "#60a5fa",
           borderWidth: 3,
           yAxisID: "yTensao"
@@ -226,7 +259,7 @@ function criarGraficoSobreposto() {
           borderWidth: 1,
           padding: 12,
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               if (context.dataset.label.includes("Potência")) return `${context.raw} W`;
               if (context.dataset.label.includes("Tensão")) return `${context.raw} V`;
               if (context.dataset.label.includes("Corrente")) return `${context.raw} A`;
@@ -304,10 +337,10 @@ function criarGraficoSobreposto() {
     const resetZoomBtn = document.getElementById("resetZoomBtn");
     if (chart && chart.resetZoom && zoomInBtn && zoomOutBtn && resetZoomBtn) {
       zoomInBtn.onclick = () => {
-        chart.zoom({x: 1.2});
+        chart.zoom({ x: 1.2 });
       };
       zoomOutBtn.onclick = () => {
-        chart.zoom({x: 0.8});
+        chart.zoom({ x: 0.8 });
       };
       resetZoomBtn.onclick = () => {
         chart.options.scales.x.min = undefined;
@@ -398,9 +431,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const partes = horarios.split(',');
 
     document.getElementById("modalHorarioInicio1").value = normalizarHora(partes[0]?.split('-')[0]) || "07:00";
-    document.getElementById("modalHorarioFim1").value   = normalizarHora(partes[0]?.split('-')[1]) || "12:10";
+    document.getElementById("modalHorarioFim1").value = normalizarHora(partes[0]?.split('-')[1]) || "12:10";
     document.getElementById("modalHorarioInicio2").value = normalizarHora(partes[1]?.split('-')[0]) || "18:30";
-    document.getElementById("modalHorarioFim2").value   = normalizarHora(partes[1]?.split('-')[1]) || "21:40";
+    document.getElementById("modalHorarioFim2").value = normalizarHora(partes[1]?.split('-')[1]) || "21:40";
   };
   document.getElementById("cancelarHorariosBtn").onclick = () => {
     document.getElementById("modalHorarios").classList.add("hidden");
@@ -435,6 +468,7 @@ window.addEventListener("DOMContentLoaded", () => {
       retornoAPI.potenciaMaxima = parseInt(document.getElementById("potenciaMaxima").value, 10) || 1;
       retornoAPI.intervaloAtualizacao = parseInt(document.getElementById("intervaloAtualizacao").value, 10) || 1;
       preencherDados();
+      enviarDadosConfiguracao();
       configForm.classList.add("pointer-events-none", "opacity-80");
       inputs.forEach(i => i.setAttribute("readonly", true));
       btnDiasMonitorados.disabled = true;

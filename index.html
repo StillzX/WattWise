@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WattWise</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="Images/icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="min-h-screen flex flex-col items-center bg-gradient-to-br from-[#101014] via-[#18181b] to-[#1e293b] transition-all duration-300">
@@ -70,7 +71,7 @@
             <div class="col-span-1">
               <img src="Images/hardware WattWise.jpg" alt="Descrição da Imagem" class="w-full h-auto rounded-lg">
               <p class="text-sm text-center text-gray-400 mt-2">
-                Hardware montado para o monitoramento de energia⚡
+                Hardware usado para o monitoramento de energia⚡
               </p>
             </div>
 
@@ -115,6 +116,41 @@
               <p class="text-gray-300 text-sm md:text-base">Ao receber essa requisição, o servidor web, por meio do arquivo em PHP onde contém a API, processa os dados e os armazena em um banco de dados. Isso permite que o histórico de consumo seja salvo e possa ser visualizado ou analisado posteriormente. A resposta do servidor informa o status da operação, se foi concluída com sucesso (OK) ou se ocorreu algum problema.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto mt-40 mb-12 px-4">
+        <div class="flex flex-col md:flex-row items-start md:items-stretch gap-8 md:gap-16 relative">
+          <div class="md:w-1/2 space-y-4">
+            <h3 class="text-2xl font-bold text-[#60a5fa] text-center">Configuração e controle</h3>
+            <p class="text-lg text-gray-300 text-justify leading-relaxed">
+              O sistema também possibilita um controle remoto sobre o dispositivo. O Arduino recebe um conjunto de configurações do servidor que ajustam seu comportamento.
+            </p>
+            
+            <h4 class="text-xl font-semibold text-[#60a5fa]">Configurações recebidas</h4>
+            <p class="text-lg text-gray-300 text-justify leading-relaxed">
+              As configurações são enviadas do servidor para o Arduino na mesma resposta da requisição GET. Isso garante que o dispositivo esteja sempre atualizado. As informações de configuração incluem:
+            </p>
+            <ul class="list-disc list-inside text-lg text-gray-300 leading-relaxed space-y-2">
+              <li><span class="font-semibold">Status de operação:</span> Informa se a comunicação foi bem-sucedida (OK).</li>
+              <li><span class="font-semibold">Dias de monitoramento:</span> Especifica os dias da semana em que o monitoramento deve ser realizado. Por exemplo, SEG, TER, QUA, QUI, SEX.</li>
+              <li><span class="font-semibold">Horário de uso permitido:</span> Define as faixas de horário em que o consumo de energia pode estar acima de um certo limite. No exemplo, 7:00-12:10 e 18:30-21:40.</li>
+              <li><span class="font-semibold">Potência máxima fora do horário permitido:</span> Um valor em Watts que limita a potência consumida fora dos horários liberados. Isso ajuda a evitar o desperdício de energia.</li>
+              <li><span class="font-semibold">Intervalo de atualização:</span> Define o tempo entre cada envio de dados, ajustando a frequência com que o Arduino se comunica com o servidor.</li>
+            </ul>
+          </div>
+
+          <div class="hidden md:block absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 border-l-2 border-solid border-[#374151]"></div>
+
+          <div class="md:w-1/2 space-y-4">
+            <h3 class="text-2xl font-bold text-[#60a5fa] text-center">Aplicação e benefícios</h3>
+            <p class="text-lg text-gray-300 mb-4 text-justify leading-relaxed">
+              Com base nessas configurações, o Arduino pode tomar decisões inteligentes. Por exemplo, se a potência consumida exceder a potência máxima permitida em um horário não autorizado, o sistema pode enviar uma notificação ou até mesmo cortar a energia para economizar.
+            </p>
+            <p class="text-lg text-gray-300 text-justify leading-relaxed">
+              Essa arquitetura simples e eficaz transforma um projeto de monitoramento em uma solução completa de gestão de energia, permitindo o controle de gastos e o uso consciente de eletricidade de maneira automatizada.
+            </p>
           </div>
         </div>
       </div>

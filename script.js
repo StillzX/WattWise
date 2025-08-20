@@ -30,7 +30,7 @@ function enviarDadosConfiguracao() {
       intervalo_atualizacao: retornoAPI.intervaloAtualizacao
   });
 
-  fetch('http://45.187.127.77/energia/save_settings.php', {
+  fetch('https://45.187.127.77/energia/save_settings.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -484,3 +484,4 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   };
 });
+
